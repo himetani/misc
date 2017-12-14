@@ -9,7 +9,7 @@ func TestBarrier(t *testing.T) {
 	t.Run("Correct endpoints", func(t *testing.T) {
 		endpoints := []string{"https://httpbin.org/headers", "http://httpbin.org/User-Agent"}
 
-		result := captureBarrierOutput(endpoints)
+		result := captureBarrierOutput(endpoints...)
 
 		if !strings.Contains(result, "Accept-Encoding") || strings.Contains(result, "User-Agent") {
 			t.Fail()
