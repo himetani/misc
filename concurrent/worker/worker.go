@@ -65,9 +65,7 @@ func (w *PrefixSuffixWorker) append(in <-chan Request) <-chan Request {
 	return out
 }
 
-func (w *PrefixSuffixWorker) prefixs(in <-chan Request) <-chan Request {
-	out := make(chan Request)
-
+func (w *PrefixSuffixWorker) prefixs(in <-chan Request) {
 	go func() {
 		for msg := range in {
 			uppercaseStringWithSuffix, ok := msg.Data.(string)
@@ -77,13 +75,9 @@ func (w *PrefixSuffixWorker) prefixs(in <-chan Request) <-chan Request {
 				continue
 			}
 
-			msg.Data = fmt.Sprintf("%s%s", w.prefix, uppercaseStringWithSuffix)
+			msg.Handler(fmt.Sprintf("%s%s", w.prefix, uppercaseStringWithSuffix))
 
-			out <- msg
 		}
 
-		close(out)
 	}()
-
-	return out
 }
